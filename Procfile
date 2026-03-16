@@ -1,0 +1,1 @@
+web: java -jar target/Omniflash_info-0.0.1-SNAPSHOT.jar
