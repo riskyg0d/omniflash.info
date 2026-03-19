@@ -26,4 +26,5 @@ public interface NewsRepository extends JpaRepository<News, Long> {
     @Query("DELETE FROM News n WHERE n.publishedTime < :cutoff")
     void deleteOldNews(LocalDateTime cutoff);
 
+    List<News> findAllByOrderByPublishedTimeDesc();
 }

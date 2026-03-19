@@ -13,6 +13,9 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 
 @Service
 public class RSSReuter {
@@ -37,21 +40,30 @@ public class RSSReuter {
             System.out.println(source + " items found: " + items.size());
 
             for(Element item : items){
-
                 String title = item.select("title").text();
                 String link = item.select("link").text();
+                String pubDateStr = item.select("pubDate").text();
 
                 if(title == null || title.isEmpty())
                     continue;
 
                 News news = new News();
-
                 news.setTitle(title);
                 news.setUrl(link);
                 news.setSource(source);
                 news.setCategory(NewsService.detectCategory(title));
-                news.setPublishedTime(LocalDateTime.now());
                 news.setBreaking(isBreaking(title));
+                try {
+                    if (!pubDateStr.isEmpty()) {
+                        ZonedDateTime zdt = ZonedDateTime.parse(pubDateStr, DateTimeFormatter.RFC_1123_DATE_TIME);
+                        news.setPublishedTime(zdt.toLocalDateTime());
+                    } else {
+                        news.setPublishedTime(LocalDateTime.now());
+                    }
+                } catch (DateTimeParseException e) {
+                    System.err.println("Failed to parse date: " + pubDateStr);
+                    news.setPublishedTime(LocalDateTime.now());
+                }
 
                 newsService.saveNews(news);
             }

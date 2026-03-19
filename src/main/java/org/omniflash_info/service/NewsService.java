@@ -70,7 +70,7 @@ public class NewsService {
     }
     public List<News> getBalancedNews(){
 
-        List<News> allNews = newsRepository.findAll();
+        List<News> allNews = newsRepository.findAllByOrderByPublishedTimeDesc();
 
         Map<String, Queue<News>> sourceMap = new HashMap<>();
 
