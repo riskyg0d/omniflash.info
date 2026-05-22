@@ -32,36 +32,34 @@ public class NewsService {
     public List<News> searchNews(String keyword) {
         return newsRepository.findByTitleContainingIgnoreCase(keyword);
     }
-    public static String detectCategory(String title){
+        public static String detectCategory(String title) {
+            if (title == null) return "general";
+            String t = title.toLowerCase();
 
-        if(title == null) return "general";
+            // Score each category — highest wins
+            Map<String, Integer> scores = new LinkedHashMap<>();
+            scores.put("crypto", score(t, "bitcoin", "crypto", "ethereum", "blockchain", "altcoin", "defi"));
+            scores.put("markets", score(t, "stock", "shares", "nasdaq", "dow", "nifty", "sensex", "bse", "nse", "fii", "dii", "smallcap", "midcap", "largecap"));
+            scores.put("commodities", score(t, "crude oil", "gold price", "silver price", "natural gas", "commodity", "brent", "wti"));
+            scores.put("economy", score(t, "inflation", "interest rate", "gdp", "rbi", "fiscal deficit", "monetary policy", "cpi", "wpi"));
+            scores.put("technology", score(t, "artificial intelligence", "ai chip", "semiconductor", "saas", "cloud computing", "startup"));
+            scores.put("business", score(t, "merger", "acquisition", "earnings", "ipo", "quarterly results", "revenue", "profit"));
+            scores.put("geopolitics", score(t, "sanctions", "trade war", "tariff", "military", "nato", "treaty"));
+            scores.put("regulatory", score(t, "sebi", "regulation", "compliance", "penalty", "ban"));
 
-        String t = title.toLowerCase();
-
-        if(t.contains("bitcoin") || t.contains("crypto") || t.contains("ethereum") || t.contains("blockchain"))
-            return "crypto";
-
-        if(t.contains("stock") || t.contains("shares") || t.contains("nasdaq") || t.contains("dow") || t.contains("nifty") || t.contains("sensex"))
-            return "markets";
-
-        if(t.contains("oil") || t.contains("gold") || t.contains("gas") || t.contains("silver") || t.contains("crude oil"))
-            return "commodities";
-
-        if(t.contains("fed") || t.contains("inflation") || t.contains("interest rate") || t.contains("gdp"))
-            return "economy";
-
-        if(t.contains("apple") || t.contains("microsoft") || t.contains("tesla") || t.contains("ai"))
-            return "technology";
-
-        if(t.contains("merger") || t.contains("acquisition") || t.contains("earnings") || t.contains("ipo"))
-            return "business";
-
-        if(t.contains("war") || t.contains("sanctions") || t.contains("china") || t.contains("russia"))
-            return "geopolitics";
-
-        return "finance";
+            return scores.entrySet().stream()
+                    .filter(e -> e.getValue() > 0)
+                    .max(Map.Entry.comparingByValue())
+                    .map(Map.Entry::getKey)
+                    .orElse("finance");
+        }
+    private static int score(String text, String... keywords) {
+        int s = 0;
+        for (String kw : keywords) {
+            if (text.contains(kw)) s++;
+        }
+        return s;
     }
-
     public News saveNews(News news) {
         if(newsRepository.findByTitle(news.getTitle()).isEmpty()){
             newsRepository.save(news);

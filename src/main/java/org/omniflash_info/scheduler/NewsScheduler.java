@@ -14,6 +14,7 @@ public class NewsScheduler {
     @Scheduled(fixedRate = 600000)
     public void scrapeNews(){
 
+        // Existing feeds
         rssNewsScraper.scrapeRSS(
                 "https://www.cnbc.com/id/100003114/device/rss/rss.html",
                 "CNBC");
@@ -29,6 +30,19 @@ public class NewsScheduler {
         rssNewsScraper.scrapeRSS(
                 "https://www.moneycontrol.com/rss/latestnews.xml",
                 "Moneycontrol");
+
+        // Newly added Indian market feeds
+        rssNewsScraper.scrapeRSS(
+                "https://economictimes.indiatimes.com/rssfeeds/1221656.cms",
+                "Economic Times");
+
+        rssNewsScraper.scrapeRSS(
+                "https://www.thehindubusinessline.com/news/feeder/default/rss/",
+                "Hindu BusinessLine");
+
+        rssNewsScraper.scrapeRSS(
+                "https://feeds.feedburner.com/ndtvnews-business",
+                "NDTV Business");
 
         System.out.println("RSS scraping completed");
     }
