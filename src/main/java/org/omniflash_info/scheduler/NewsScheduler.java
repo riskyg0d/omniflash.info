@@ -16,7 +16,7 @@ public class NewsScheduler {
 
         // Existing feeds
         rssNewsScraper.scrapeRSS(
-                "https://www.cnbc.com/id/100003114/device/rss/rss.html",
+                "https://search.cnbc.com/rs/search/combinedcms/view.xml?partnerId=wrss01&id=10000664",
                 "CNBC");
 
         rssNewsScraper.scrapeRSS(
@@ -31,17 +31,25 @@ public class NewsScheduler {
                 "https://www.moneycontrol.com/rss/latestnews.xml",
                 "Moneycontrol");
 
-        // Newly added Indian market feeds
         rssNewsScraper.scrapeRSS(
-                "https://economictimes.indiatimes.com/rssfeeds/1221656.cms",
+                "https://www.etnownews.com/feeds/gns-etn-markets.xml",
                 "Economic Times");
 
         rssNewsScraper.scrapeRSS(
-                "https://www.thehindubusinessline.com/news/feeder/default/rss/",
+                "https://www.etnownews.com/feeds/gns-etn-technology.xml",
+                "Economic Times Technology");
+
+        rssNewsScraper.scrapeRSS(
+                "https://www.etnownews.com/feeds/gns-etn-mutual-funds.xml",
+                "Economic Times Technology");
+
+
+        rssNewsScraper.scrapeRSS(
+                "https://www.thehindubusinessline.com/markets/feeder/default.rss",
                 "Hindu BusinessLine");
 
         rssNewsScraper.scrapeRSS(
-                "https://feeds.feedburner.com/ndtvnews-business",
+                "https://feeds.feedburner.com/ndtvprofit-latest",
                 "NDTV Business");
 
         System.out.println("RSS scraping completed");
