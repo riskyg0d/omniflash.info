@@ -26,6 +26,7 @@ public class RSSReuter {
     public void scrapeRSS(String url, String source){
 
         try{
+            LocalDateTime cutoff = LocalDateTime.now().minusDays(1); // or .minusWeeks(1)
 
             Document doc = Jsoup.connect(url)
                     .userAgent("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0 Safari/537.36")
@@ -56,7 +57,7 @@ public class RSSReuter {
                 try {
                     if (!pubDateStr.isEmpty()) {
                         ZonedDateTime zdt = ZonedDateTime.parse(pubDateStr, DateTimeFormatter.RFC_1123_DATE_TIME);
-                        news.setPublishedTime(zdt.toLocalDateTime());
+                        news.setPublishedTime(zdt.withZoneSameInstant(java.time.ZoneId.systemDefault()).toLocalDateTime());
                     } else {
                         news.setPublishedTime(LocalDateTime.now());
                     }
@@ -64,7 +65,9 @@ public class RSSReuter {
                     System.err.println("Failed to parse date: " + pubDateStr);
                     news.setPublishedTime(LocalDateTime.now());
                 }
-
+                if (news.getPublishedTime().isBefore(cutoff)) {
+                    continue;
+                }
                 newsService.saveNews(news);
             }
 

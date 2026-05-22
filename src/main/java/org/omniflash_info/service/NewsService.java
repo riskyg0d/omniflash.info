@@ -41,10 +41,10 @@ public class NewsService {
         if(t.contains("bitcoin") || t.contains("crypto") || t.contains("ethereum") || t.contains("blockchain"))
             return "crypto";
 
-        if(t.contains("stock") || t.contains("shares") || t.contains("nasdaq") || t.contains("dow"))
+        if(t.contains("stock") || t.contains("shares") || t.contains("nasdaq") || t.contains("dow") || t.contains("nifty") || t.contains("sensex"))
             return "markets";
 
-        if(t.contains("oil") || t.contains("gold") || t.contains("gas"))
+        if(t.contains("oil") || t.contains("gold") || t.contains("gas") || t.contains("silver") || t.contains("crude oil"))
             return "commodities";
 
         if(t.contains("fed") || t.contains("inflation") || t.contains("interest rate") || t.contains("gdp"))
