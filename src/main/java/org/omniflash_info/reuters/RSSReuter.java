@@ -66,8 +66,9 @@ public class RSSReuter {
                     news.setPublishedTime(LocalDateTime.now());
                 }
                 if (news.getPublishedTime().isBefore(cutoff)) {
-                    newsService.saveNews(news);
+                    continue;
                 }
+                newsService.saveNews(news);
             }
 
         }catch(Exception e){
